@@ -5,12 +5,12 @@ function checkAlert() {
   var elm  = $('.alert-event-description');
 
   if(elm.length > 0 ){
-    console.log('found element')
+    console.log('found element');
 
 
     var text = elm.text();
-
-    console.log(text)
+    console.log('serge');
+    console.log(text);
 
   }
 }
