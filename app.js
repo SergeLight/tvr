@@ -1,9 +1,10 @@
 
-function sendProp(prop){
+function sendProp(ws, prop){
+
     ws.send(JSON.stringify(prop))
 }
 
-function buy(id) {
+function buy(ws, id) {
 
     var buy = {
         "buy": id,
@@ -14,7 +15,7 @@ function buy(id) {
 
 }
 
-function sell(id) {
+function sell(ws, id) {
 
     var sell = {
         "sell": id,
@@ -30,7 +31,7 @@ function getProposal(name){
     var ret;
     
     var prop = {
-        "buy5MinCall": {
+        "buy1MinCall": {
             "proposal": 1,
             "amount": "1",
             "basis": "payout",
@@ -41,7 +42,7 @@ function getProposal(name){
             "symbol": "R_100"
         }
         ,
-        "sell5MinCall":  {
+        "sell1MinCall":  {
             "proposal": 1,
             "amount": "1",
             "basis": "payout",
@@ -66,18 +67,16 @@ function getProposal(name){
 
 function authorize () {
 
-    var ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=3534');
-
-
-    var auth = {
-        "authorize": "xNPheF6PRHEJyJl"
-    };
-
-    ws.onopen = function(evt) {
-        ws.send(JSON.stringify(auth));
-    };
-
-    
+    // var ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=3534');
+    //
+    //
+    // var auth = {
+    //     "authorize": "xNPheF6PRHEJyJl"
+    // };
+    //
+    // ws.onopen = function(evt) {
+    //     ws.send(JSON.stringify(auth));
+    // };
 
 
     // ws.onmessage = function(msg) {
@@ -112,49 +111,49 @@ function authorize () {
 
 $(document).ready(function(){
 
+    var ws = new WebSocket('wss://ws.binaryws.com/websockets/v3?app_id=3534');
 
-    // ws.onmessage = function(msg) {
-    //
-    //     var data = JSON.parse(msg.data);
-    //
-    //     console.log(data);
-    //
-    //     if( data.hasOwnProperty('error')){
-    //
-    //         var message = "Dear TVR user: " + data.error.code + data.error.message
-    //         console.log(message);
-    //
-    //     }else{
-    //         if (data.msg_type === 'proposal'){
-    //
-    //             if(data.proposal.id){
-    //                 buy(data.proposal.id)
-    //             }else{
-    //                 console.log('No proposal id');
-    //             }
-    //
-    //         }else{
-    //             console.log(data);
-    //         }
-    //
-    //     }
-    // };
+    var auth = {
+        "authorize": "xNPheF6PRHEJyJl"
+    };
+
+    ws.onopen = function(evt) {
+        ws.send(JSON.stringify(auth));
+    };
+
+    ws.onmessage = function(msg) {
+
+        var data = JSON.parse(msg.data);
+
+        console.log(data);
+
+        if( data.hasOwnProperty('error')) {
+            var message = "Dear TVR user: " + data.error.code + data.error.message;
+            console.log(message);
+
+        } else if (data.hasOwnProperty('authorize')) {
+
+            console.log('Authorize Successfull');
+
+        }else if (data.msg_type === 'proposal'){
+
+                if(data.proposal.id){
+                    buy(ws, data.proposal.id)
+                }else{
+                    console.log('No proposal id');
+                }
+
+
+        }
+    };
 
 
     $(document).on('click', '.button', function () {
 
-        authorize();
-        var prop = getProposal('buy5MinCall');
-        var propret = sendProp(prop);
+        var prop = getProposal('buy1MinCall');
 
-
+        sendProp(ws,prop);
 
     });
-
-
-
-
-
-
 
 });
