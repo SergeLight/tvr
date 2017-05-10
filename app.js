@@ -31,7 +31,7 @@ function getProposal(name){
     var ret;
     
     var prop = {
-        "buy1MinCall": {
+        "buy1minCall": {
             "proposal": 1,
             "amount": "1",
             "basis": "payout",
@@ -39,10 +39,10 @@ function getProposal(name){
             "currency": "USD",
             "duration": "60",
             "duration_unit": "s",
-            "symbol": "R_100"
+            "symbol": "frxUSDJPY"
         }
         ,
-        "sell1MinCall":  {
+        "sell1minCall":  {
             "proposal": 1,
             "amount": "1",
             "basis": "payout",
@@ -50,7 +50,7 @@ function getProposal(name){
             "currency": "USD",
             "duration": "60",
             "duration_unit": "s",
-            "symbol": "R_100"
+            "symbol": "frxUSDJPY"
         }
     };
 
@@ -62,6 +62,8 @@ function getProposal(name){
         }
     }
 
+    console.log(ret);
+    
     return ret;
 }
 
@@ -150,7 +152,7 @@ $(document).ready(function(){
 
     $(document).on('click', '.button', function () {
 
-        var prop = getProposal('buy1MinCall');
+        var prop = getProposal('buy1minCall');
 
         sendProp(ws,prop);
 
